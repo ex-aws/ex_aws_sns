@@ -100,9 +100,9 @@ defmodule ExAws.SNSTest do
       "Action" => "Publish",
       "Message" => "Hello World",
       "TopicArn" => "arn:aws:sns:us-east-1:982071696186:test-topic",
-      "MessageAttribute.entry.1.Name" => "SenderID",
-      "MessageAttribute.entry.1.Value.DataType" => "String",
-      "MessageAttribute.entry.1.Value.StringValue" => "sender"
+      "MessageAttributes.entry.1.Name" => "SenderID",
+      "MessageAttributes.entry.1.Value.DataType" => "String",
+      "MessageAttributes.entry.1.Value.StringValue" => "sender"
     }
 
     attrs = [%{
@@ -211,15 +211,15 @@ defmodule ExAws.SNSTest do
     expected = %{
       "Action" => "Publish",
       "Message" => "message",
-      "MessageAttribute.entry.1.Name" => "AWS.SNS.SMS.SenderID",
-      "MessageAttribute.entry.1.Value.DataType" => "String",
-      "MessageAttribute.entry.1.Value.StringValue" => "sender",
-      "MessageAttribute.entry.2.Name" => "AWS.SNS.SMS.MaxPrice",
-      "MessageAttribute.entry.2.Value.DataType" => "String",
-      "MessageAttribute.entry.2.Value.StringValue" => "0.8",
-      "MessageAttribute.entry.3.Name" => "AWS.SNS.SMS.SMSType",
-      "MessageAttribute.entry.3.Value.DataType" => "String",
-      "MessageAttribute.entry.3.Value.StringValue" => "Transactional",
+      "MessageAttributes.entry.1.Name" => "AWS.SNS.SMS.SenderID",
+      "MessageAttributes.entry.1.Value.DataType" => "String",
+      "MessageAttributes.entry.1.Value.StringValue" => "sender",
+      "MessageAttributes.entry.2.Name" => "AWS.SNS.SMS.MaxPrice",
+      "MessageAttributes.entry.2.Value.DataType" => "String",
+      "MessageAttributes.entry.2.Value.StringValue" => "0.8",
+      "MessageAttributes.entry.3.Name" => "AWS.SNS.SMS.SMSType",
+      "MessageAttributes.entry.3.Value.DataType" => "String",
+      "MessageAttributes.entry.3.Value.StringValue" => "Transactional",
       "PhoneNumber" => "+15005550006"
     }
 
