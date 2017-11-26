@@ -1,14 +1,32 @@
 defmodule ExAws.SNS.Mixfile do
   use Mix.Project
 
+  @version "2.0.0"
+  @service "sns"
+  @url "https://github.com/ex-aws/ex_aws_#{@service}"
+  @name __MODULE__ |> Module.split |> Enum.take(2) |> Enum.join(".")
+
   def project do
     [
       app: :ex_aws_sns,
-      version: "2.0.0",
+      version: @version,
       elixir: "~> 1.5",
       elixirc_paths: elixirc_paths(Mix.env),
       start_permanent: Mix.env == :prod,
-      deps: deps()
+      deps: deps(),
+      name: @name,
+      package: package(),
+      docs: [main: @name, source_ref: "v#{@version}",
+        source_url: @url]
+    ]
+  end
+
+  defp package do
+    [description: "#{@name} service package",
+     files: ["lib", "config", "mix.exs", "README*"],
+     maintainers: ["Ben Wilson"],
+     licenses: ["MIT"],
+     links: %{github: @url},
     ]
   end
 
@@ -24,6 +42,7 @@ defmodule ExAws.SNS.Mixfile do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      {:ex_doc, ">= 0.0.0", only: :dev},
       {:hackney, ">= 0.0.0", only: [:dev, :test]},
       {:sweet_xml, ">= 0.0.0", only: [:dev, :test]},
       {:poison, ">= 0.0.0", only: [:dev, :test]},
