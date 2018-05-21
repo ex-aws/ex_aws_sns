@@ -264,7 +264,7 @@ defmodule ExAws.SNS do
 
   @spec list_phone_numbers_opted_out(next_token :: binary) :: ExAws.Operation.Query.t
   def list_phone_numbers_opted_out(next_token) do
-    request(:list_phone_numbers_opted_out, %{"NextToken" => next_token})
+    request(:list_phone_numbers_opted_out, %{"nextToken" => next_token})
   end
 
   @doc "Opt in phone number"
