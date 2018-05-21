@@ -197,7 +197,7 @@ defmodule ExAws.SNSTest do
     expected = %{"Action" => "ListPhoneNumbersOptedOut"}
     assert expected == SNS.list_phone_numbers_opted_out().params
 
-    expected = %{"Action" => "ListPhoneNumbersOptedOut", "NextToken" => "123456789"}
+    expected = %{"Action" => "ListPhoneNumbersOptedOut", "nextToken" => "123456789"}
     assert expected == SNS.list_phone_numbers_opted_out("123456789").params
   end
 
