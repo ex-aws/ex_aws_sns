@@ -53,7 +53,7 @@ defmodule ExAws.SNS.Mixfile do
   defp ex_aws() do
     case System.get_env("AWS") do
       "LOCAL" -> {:ex_aws, path: "../ex_aws"}
-      _ -> {:ex_aws, "~> 2.0.0"}
+      _ -> {:ex_aws, "~> 2.0"}
     end
   end
 end
