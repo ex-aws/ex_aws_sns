@@ -183,13 +183,15 @@ defmodule ExAws.SNS do
   @type subscription_attribute_name :: :delivery_policy | :raw_message_delivery
 
   @doc "Create Subscription"
-  @spec subscribe(topic_arn :: binary, protocol :: binary, endpoint :: binary) :: ExAws.Operation.Query.t
-  def subscribe(topic_arn, protocol, endpoint) do
-    request(:subscribe, %{
+  @spec subscribe(topic_arn :: binary, protocol :: binary, endpoint :: binary, [subscribe_opt]) :: ExAws.Operation.Query.t
+  def subscribe(topic_arn, protocol, endpoint, opts \\ []) do
+    params = Keyword.into(opts, %{
       "TopicArn" => topic_arn,
       "Protocol" => protocol,
       "Endpoint" => endpoint,
     })
+
+    request(:subscribe, opts)
   end
 
   @doc "Confirm Subscription"
