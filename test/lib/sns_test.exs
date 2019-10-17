@@ -205,6 +205,17 @@ defmodule ExAws.SNSTest do
       :raw_message_delivery,
       "{\"healthyRetryPolicy\":{\"numRetries\":5}}",
       subscription_arn).params
+
+    expected = %{
+      "Action" => "SetSubscriptionAttributes",
+      "SubscriptionArn" => subscription_arn,
+      "AttributeName" => "FilterPolicy",
+      "AttributeValue" => "{\"status\":[\"ok\"]}",
+    }
+    assert expected == SNS.set_subscription_attributes(
+      :filter_policy,
+      "{\"status\":[\"ok\"]}",
+      subscription_arn).params
   end
 
   test "#list_phone_numbers_opted_out" do

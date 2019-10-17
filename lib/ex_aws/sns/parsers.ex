@@ -188,6 +188,7 @@ if Code.ensure_loaded?(SweetXml) do
         confirmation_was_authenticated: ~x"./GetSubscriptionAttributesResult/Attributes/entry[./key = 'ConfirmationWasAuthenticated']/value/text()"s,
         delivery_policy: ~x"./GetSubscriptionAttributesResult/Attributes/entry[./key = 'DeliveryPolicy']/value/text()"s,
         effective_delivery_policy: ~x"./GetSubscriptionAttributesResult/Attributes/entry[./key = 'EffectiveDeliveryPolicy']/value/text()"s,
+        filter_policy: ~x"./GetSubscriptionAttributesResult/Attributes/entry[./key = 'FilterPolicy']/value/text()"s,
         request_id: request_id_xpath())
 
       parsed_body = Map.put(parsed_body, :confirmation_was_authenticated, parsed_body[:confirmation_was_authenticated] == "true")
