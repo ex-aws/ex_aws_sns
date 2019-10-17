@@ -529,6 +529,10 @@ defmodule ExAws.SNS.ParserTest do
               <value>123456789012</value>
             </entry>
             <entry>
+              <key>FilterPolicy</key>
+              <value>{&quot;status&quot;:[&quot;ok&quot;]}</value>
+            </entry>
+            <entry>
               <key>DeliveryPolicy</key>
               <value>{&quot;healthyRetryPolicy&quot;:{&quot;numRetries&quot;:10}}</value>
             </entry>
@@ -557,6 +561,7 @@ defmodule ExAws.SNS.ParserTest do
     assert parsed_doc[:owner] == "123456789012"
     assert parsed_doc[:delivery_policy] == ~s({"healthyRetryPolicy":{"numRetries":10}})
     assert parsed_doc[:effective_delivery_policy] == ~s({"healthyRetryPolicy":{"numRetries":10}})
+    assert parsed_doc[:filter_policy] == ~s({"status":["ok"]})
     assert parsed_doc[:subscription_arn] == "arn:aws:sns:us-east-1:123456789012:My-Topic:80289ba6-0fd4-4079-afb4-ce8c8260f0ca"
     assert parsed_doc[:confirmation_was_authenticated] == true
   end
