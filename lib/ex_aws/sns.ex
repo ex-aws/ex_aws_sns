@@ -180,16 +180,22 @@ defmodule ExAws.SNS do
   ## Subscriptions
   ######################
 
+  @type subscription_attribute_name :: :delivery_policy | :raw_message_delivery
+  @type subscribe_opt :: {:return_subscription_arn, boolean}
+  
   @type subscription_attribute_name :: :delivery_policy | :filter_policy | :raw_message_delivery
 
   @doc "Create Subscription"
-  @spec subscribe(topic_arn :: binary, protocol :: binary, endpoint :: binary) :: ExAws.Operation.Query.t
-  def subscribe(topic_arn, protocol, endpoint) do
-    request(:subscribe, %{
+  @spec subscribe(topic_arn :: binary, protocol :: binary, endpoint :: binary, [subscribe_opt]) :: ExAws.Operation.Query.t
+  def subscribe(topic_arn, protocol, endpoint, opts \\ []) do
+    params = %{
       "TopicArn" => topic_arn,
       "Protocol" => protocol,
       "Endpoint" => endpoint,
-    })
+      "ReturnSubscriptionArn" => (opts[:return_subscription_arn] || false),
+    }
+
+    request(:subscribe, params)
   end
 
   @doc "Confirm Subscription"

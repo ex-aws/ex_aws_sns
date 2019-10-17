@@ -119,9 +119,23 @@ defmodule ExAws.SNSTest do
       "Action"   => "Subscribe",
       "TopicArn" => "arn:aws:sns:us-east-1:982071696186:test-topic",
       "Protocol" => "https",
-      "Endpoint" => "https://example.com"
+      "Endpoint" => "https://example.com",
+      "ReturnSubscriptionArn" => false
     }
     assert expected == SNS.subscribe("arn:aws:sns:us-east-1:982071696186:test-topic", "https", "https://example.com").params
+  end
+
+  test "#subscribe with return_subscription_arn" do
+    expected = %{
+      "Action"   => "Subscribe",
+      "TopicArn" => "arn:aws:sns:us-east-1:982071696186:test-topic",
+      "Protocol" => "https",
+      "Endpoint" => "https://example.com",
+      "ReturnSubscriptionArn" => true
+    }
+
+    opts = [return_subscription_arn: true]
+    assert expected == SNS.subscribe("arn:aws:sns:us-east-1:982071696186:test-topic", "https", "https://example.com", opts).params
   end
 
   test "#confirm_subscription" do
