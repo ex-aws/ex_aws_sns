@@ -338,7 +338,7 @@ defmodule ExAws.SNS do
   @message_types ["SubscriptionConfirmation", "UnsubscribeConfirmation", "Notification"]
 
   @doc "Verify message signature"
-  @spec verify_message(message_params :: %{String.t => String.t}) :: [:ok | {:error, String.t}]
+  @spec verify_message(message_params :: %{String.t => String.t}) :: :ok | {:error, String.t}
   def verify_message(message_params) do
     with :ok <- validate_message_params(message_params),
          :ok <- validate_signature_version(message_params["SignatureVersion"]),
