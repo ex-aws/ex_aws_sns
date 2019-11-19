@@ -438,6 +438,7 @@ defmodule ExAws.SNSTest do
   end
 
   defp add_verify_message(context) do
+
     message = %{
       "Type" => "SubscriptionConfirmation",
       "MessageId" => "c98bfcda-56fc-459e-9257-88b9553e22d7",
