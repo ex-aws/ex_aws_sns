@@ -319,17 +319,18 @@ defmodule ExAws.SNSTest do
   end
 
   defp add_verify_message(context) do
+
     message = %{
       "Type" => "SubscriptionConfirmation",
-      "MessageId" => "c98bfcda-56fc-459e-9257-88b9553e22d7",
-      "Token" => "2336412f37fb687f5d51e6e241d44a2dc0dc1808be349325be7bdd46c777d7461673f5800c81ae6d5ec8e7ff8e24985fadefa80d9d9471fdf3091a6c239105468b29615b925b53382a5b69a53872116c1d1dc3af2122db5399d6be5cea19ef72aa09a8309e00f296e4e461561bb2397d",
-      "TopicArn" => "arn:aws:sns:eu-west-1:511293508251:ex_aws_test",
-      "Message" => "You have chosen to subscribe to the topic arn:aws:sns:eu-west-1:511293508251:ex_aws_test.\nTo confirm the subscription, visit the SubscribeURL included in this message.",
-      "SubscribeURL" => "https://sns.eu-west-1.amazonaws.com/?Action=ConfirmSubscription&TopicArn=arn:aws:sns:eu-west-1:511293508251:ex_aws_test&Token=2336412f37fb687f5d51e6e241d44a2dc0dc1808be349325be7bdd46c777d7461673f5800c81ae6d5ec8e7ff8e24985fadefa80d9d9471fdf3091a6c239105468b29615b925b53382a5b69a53872116c1d1dc3af2122db5399d6be5cea19ef72aa09a8309e00f296e4e461561bb2397d",
-      "Timestamp" => "2016-11-16T01:52:21.709Z",
+      "MessageId" => "7a239d1e-aedc-45d6-b81d-ca73cf338784",
+      "Token" => "2336412f37fb687f5d51e6e241dbca538bd58e16dbc00d5c1ae1b4c51194942a46bef538907571f4b91b5020c58b5b33d10e6827623c06b0aaa0eb82b3c987bd57ff9819a6ea37e6668e30208d6c23eface7e9998278f6ddac83e4be19a8c1f964316d11d58f7464a417f59a9513a50f",
+      "TopicArn" => "arn:aws:sns:us-east-1:668237072717:ex_aws_test",
+      "Message" => "You have chosen to subscribe to the topic arn:aws:sns:us-east-1:668237072717:ex_aws_test.\nTo confirm the subscription, visit the SubscribeURL included in this message.",
+      "SubscribeURL" => "https://sns.us-east-1.amazonaws.com/?Action=ConfirmSubscription&TopicArn=arn:aws:sns:us-east-1:668237072717:ex_aws_test&Token=2336412f37fb687f5d51e6e241dbca538bd58e16dbc00d5c1ae1b4c51194942a46bef538907571f4b91b5020c58b5b33d10e6827623c06b0aaa0eb82b3c987bd57ff9819a6ea37e6668e30208d6c23eface7e9998278f6ddac83e4be19a8c1f964316d11d58f7464a417f59a9513a50f",
+      "Timestamp" => "2019-11-19T16:37:09.068Z",
       "SignatureVersion" => "1",
-      "Signature" => "lAUpZvBd+bA0bBFOl//ZR8+Ud1tMQR9QDiRSS0VrCPIaY67zURqTeRhmSQFBVsqGOBM+MHnCinDC5HttGGv9L2N15urvj3L5YfZOA87TLvHPJzxiA2XCD40lrSFBRDGhO7jq49hwY48K56jik9CFiMw84jLxKMrdw9KkHYAyWt12NiZWoLWa/PHbT7tmlh1+Tkc5EN4u/t3tGwS4bSZOXWq0DIKh+rE7U84Yxyph9R9ykEArEAwXEiGBfkleXpFB4AtF4PMmXXETnBI770v24LWgsopVUIBV+p1jEJi1Mcg9D/+00BnkAFFq4S0Foryr7xA/mgPZJNTlV2nK7eaQ4g==",
-      "SigningCertURL" => "https://sns.eu-west-1.amazonaws.com/SimpleNotificationService-b95095beb82e8f6a046b3aafc7f4149a.pem"
+      "Signature" => "qywQMYSpNetpNnFZXRz7K+lFZ3W7EoyzOzGKJs3aZFAMcJyQDntaNMa2nJhEIoouaiYsu8CwBhelz+iWIvzAudqGDAnVPwVg4XmN3ed0z823oaao2lPP7GocSKN+jKy/cKKXLm1t25d9BaJ9TmY/YF42uG+wGnkBtse3EB3amRPB8U89i2uSHk00Fz5Thx4LI/T4CPWYrb4pdiCHhEWRLUno28h9KQXMFxoDkGBU8clu0GYhJ56ChUwmAQytp3KHsDQrI/Cd65uXUILR3IwskR+z8rGsh5nvCHVkn/3qWTNTLTdbiBO2b+ewPiQFi3LB/wrOutKE63jlampZRk7BcQ==",
+      "SigningCertURL" => "https://sns.us-east-1.amazonaws.com/SimpleNotificationService-6aad65c2f9911b05cd53efda11f913f9.pem"
     }
     context |> Map.put(:verify_message, message)
   end
