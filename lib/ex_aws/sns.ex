@@ -1,11 +1,11 @@
 defmodule ExAws.SNS do
-  import ExAws.Utils, only: [camelize_key: 1, camelize_keys: 1]
-
   @moduledoc """
-  Operations on AWS SNS
+  Operations on AWS Simple Notification Service (SNS).
 
-  http://docs.aws.amazon.com/sns/latest/api/API_Operations.html
+  See http://docs.aws.amazon.com/sns/latest/api/API_Operations.html for details.
   """
+
+  import ExAws.Utils, only: [camelize_key: 1, camelize_keys: 1]
 
   ## Topics
   ######################
@@ -28,19 +28,19 @@ defmodule ExAws.SNS do
     request(:list_topics, opts)
   end
 
-  @doc "Create topic"
+  @doc "Create topic."
   @spec create_topic(topic_name :: topic_name) :: ExAws.Operation.Query.t
   def create_topic(topic_name) do
     request(:create_topic, %{"Name" => topic_name})
   end
 
-  @doc "Get topic attributes"
+  @doc "Get topic attributes."
   @spec get_topic_attributes(topic_arn :: topic_arn) :: ExAws.Operation.Query.t
   def get_topic_attributes(topic_arn) do
     request(:get_topic_attributes, %{"TopicArn" => topic_arn})
   end
 
-  @doc "Set topic attributes"
+  @doc "Set topic attributes."
   @spec set_topic_attributes(attribute_name :: topic_attribute_name,
                                    attribute_value :: binary,
                                    topic_arn :: topic_arn) :: ExAws.Operation.Query.t
@@ -52,7 +52,7 @@ defmodule ExAws.SNS do
     })
   end
 
-  @doc "Delete topic"
+  @doc "Delete topic."
   @spec delete_topic(topic_arn :: topic_arn) :: ExAws.Operation.Query.t
   def delete_topic(topic_arn) do
     request(:delete_topic, %{"TopicArn" => topic_arn})
@@ -72,12 +72,13 @@ defmodule ExAws.SNS do
     {:topic_arn, binary}]
 
   @doc """
-  Publish message to a target/topic ARN
+  Publish message to a target/topic ARN.
 
-  You must set either :phone_number, :target_arn or :topic_arn but only one, via the options argument.
+  You must set either `:phone_number`, `:target_arn` or `:topic_arn` but only one,
+  via the options argument.
 
   Do NOT assume that because your message is a JSON blob that you should set
-  message_structure: to :json. This has a very specific meaning, please see
+  `:message_structure` to `:json`. This has a very specific meaning, see
   http://docs.aws.amazon.com/sns/latest/api/API_Publish.html for details.
   """
   @spec publish(message :: binary, opts :: publish_opts) :: ExAws.Operation.Query.t
@@ -118,7 +119,7 @@ defmodule ExAws.SNS do
 
   @type platform_application_arn:: binary
 
-  @doc "Create plaform application"
+  @doc "Create plaform application."
   @spec create_platform_application(name :: binary, platform :: binary, attributes :: %{String.t => String.t}) :: ExAws.Operation.Query.t
   def create_platform_application(name, platform, attributes) do
     attributes =
@@ -131,7 +132,7 @@ defmodule ExAws.SNS do
     request(:create_platform_application, attributes)
   end
 
-  @doc "Delete platform application"
+  @doc "Delete platform application."
   @spec delete_platform_application(platform_application_arn :: platform_application_arn) :: ExAws.Operation.Query.t
   def delete_platform_application(platform_application_arn) do
     request(:delete_platform_application, %{
@@ -139,7 +140,7 @@ defmodule ExAws.SNS do
     })
   end
 
-  @doc "List platform applications"
+  @doc "List platform applications."
   @spec list_platform_applications() :: ExAws.Operation.Query.t
   def list_platform_applications() do
     request(:list_platform_applications, %{})
@@ -150,7 +151,7 @@ defmodule ExAws.SNS do
     request(:list_platform_applications, %{"NextToken" => next_token})
   end
 
-  @doc "Create platform endpoint"
+  @doc "Create platform endpoint."
   @spec create_platform_endpoint(platform_application_arn :: platform_application_arn,
                                    token :: binary) :: ExAws.Operation.Query.t
   @spec create_platform_endpoint(platform_application_arn :: platform_application_arn,
@@ -171,7 +172,7 @@ defmodule ExAws.SNS do
     request(:create_platform_endpoint, attrs)
   end
 
-  @doc "Get platform application attributes"
+  @doc "Get platform application attributes."
   @spec get_platform_application_attributes(platform_application_arn :: platform_application_arn) :: ExAws.Operation.Query.t
   def get_platform_application_attributes(platform_application_arn) do
     request(:get_platform_application_attributes, %{"PlatformApplicationArn" => platform_application_arn})
@@ -183,7 +184,7 @@ defmodule ExAws.SNS do
   @type subscription_attribute_name :: :delivery_policy | :filter_policy | :raw_message_delivery
   @type subscribe_opt :: {:return_subscription_arn, boolean}
 
-  @doc "Create Subscription"
+  @doc "Create Subscription."
   @spec subscribe(topic_arn :: binary, protocol :: binary, endpoint :: binary, [subscribe_opt]) :: ExAws.Operation.Query.t
   def subscribe(topic_arn, protocol, endpoint, opts \\ []) do
     params = %{
@@ -196,7 +197,7 @@ defmodule ExAws.SNS do
     request(:subscribe, params)
   end
 
-  @doc "Confirm Subscription"
+  @doc "Confirm Subscription."
   @spec confirm_subscription(topic_arn :: binary, token :: binary, authenticate_on_unsubscribe :: boolean) :: ExAws.Operation.Query.t
   def confirm_subscription(topic_arn, token, authenticate_on_unsubscribe \\ false) do
     request(:confirm_subscription, %{
@@ -206,7 +207,7 @@ defmodule ExAws.SNS do
     })
   end
 
-  @doc "List Subscriptions"
+  @doc "List Subscriptions."
   @spec list_subscriptions() :: ExAws.Operation.Query.t
   def list_subscriptions() do
     request(:list_subscriptions, %{})
@@ -219,7 +220,7 @@ defmodule ExAws.SNS do
 
   @type list_subscriptions_by_topic_opt :: {:next_token, binary}
 
-  @doc "List Subscriptions by Topic"
+  @doc "List Subscriptions by Topic."
   @spec list_subscriptions_by_topic(topic_arn :: topic_arn) :: ExAws.Operation.Query.t
   @spec list_subscriptions_by_topic(topic_arn :: topic_arn, [list_subscriptions_by_topic_opt]) :: ExAws.Operation.Query.t
   def list_subscriptions_by_topic(topic_arn, opts \\ []) do
@@ -232,7 +233,7 @@ defmodule ExAws.SNS do
     request(:list_subscriptions_by_topic, params)
   end
 
-  @doc "Unsubscribe"
+  @doc "Unsubscribe."
   @spec unsubscribe(subscription_arn :: binary) :: ExAws.Operation.Query.t
   def unsubscribe(subscription_arn) do
     request(:unsubscribe, %{
@@ -240,7 +241,7 @@ defmodule ExAws.SNS do
     })
   end
 
-  @doc "Get subscription attributes"
+  @doc "Get subscription attributes."
   @spec get_subscription_attributes(subscription_arn :: binary) :: ExAws.Operation.Query.t
   def get_subscription_attributes(subscription_arn) do
     request(:get_subscription_attributes, %{
@@ -248,7 +249,7 @@ defmodule ExAws.SNS do
     })
   end
 
-  @doc "Set subscription attributes"
+  @doc "Set subscription attributes."
   @spec set_subscription_attributes(attribute_name :: subscription_attribute_name,
                                     attribute_value :: binary,
                                     subscription_arn :: binary) :: ExAws.Operation.Query.t
@@ -260,7 +261,7 @@ defmodule ExAws.SNS do
     })
   end
 
-  @doc "List phone numbers opted out"
+  @doc "List phone numbers opted out."
   @spec list_phone_numbers_opted_out() :: ExAws.Operation.Query.t
   def list_phone_numbers_opted_out() do
     request(:list_phone_numbers_opted_out, %{})
@@ -271,7 +272,7 @@ defmodule ExAws.SNS do
     request(:list_phone_numbers_opted_out, %{"nextToken" => next_token})
   end
 
-  @doc "Opt in phone number"
+  @doc "Opt in phone number."
   @spec opt_in_phone_number(phone_number :: binary) :: ExAws.Operation.Query.t
   def opt_in_phone_number(phone_number) do
     request(:opt_in_phone_number, %{"phoneNumber" => phone_number})
@@ -288,13 +289,13 @@ defmodule ExAws.SNS do
     | {:custom_user_data, binary}
   ]
 
-  @doc "Get endpoint attributes"
+  @doc "Get endpoint attributes."
   @spec get_endpoint_attributes(endpoint_arn :: endpoint_arn) :: ExAws.Operation.Query.t
   def get_endpoint_attributes(endpoint_arn) do
     request(:get_endpoint_attributes, %{"EndpointArn" => endpoint_arn})
   end
 
-  @doc "Set endpoint attributes"
+  @doc "Set endpoint attributes."
   @spec set_endpoint_attributes(endpoint_arn :: endpoint_arn, attributes :: endpoint_attributes) :: ExAws.Operation.Query.t
   def set_endpoint_attributes(endpoint_arn, attributes) do
     params =
@@ -304,7 +305,7 @@ defmodule ExAws.SNS do
     request(:set_endpoint_attributes, Map.put(params, "EndpointArn", endpoint_arn))
   end
 
-  @doc "Delete endpoint"
+  @doc "Delete endpoint."
   @spec delete_endpoint(endpoint_arn :: endpoint_arn) :: ExAws.Operation.Query.t
   def delete_endpoint(endpoint_arn) do
     request(:delete_endpoint, %{
@@ -314,7 +315,7 @@ defmodule ExAws.SNS do
 
   @type list_endpoints_by_platform_application_opt :: {:next_token, binary}
 
-  @doc "List endpooints and endpoint attributes for devices in a supported push notification service"
+  @doc "List endpooints and endpoint attributes for devices in a supported push notification service."
   @spec list_endpoints_by_platform_application(topic_arn :: topic_arn) :: ExAws.Operation.Query.t
   @spec list_endpoints_by_platform_application(topic_arn :: topic_arn, [list_endpoints_by_platform_application_opt]) :: ExAws.Operation.Query.t
   def list_endpoints_by_platform_application(platform_application_arn, opts \\ []) do
@@ -337,7 +338,7 @@ defmodule ExAws.SNS do
   @signature_params ["SignatureVersion", "Signature", "SigningCertURL"]
   @message_types ["SubscriptionConfirmation", "UnsubscribeConfirmation", "Notification"]
 
-  @doc "Verify message signature"
+  @doc "Verify message signature."
   @spec verify_message(message_params :: %{String.t => String.t}) :: [:ok | {:error, String.t}]
   def verify_message(message_params) do
     with :ok <- validate_message_params(message_params),

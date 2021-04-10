@@ -55,5 +55,4 @@ defmodule ExAws.SNS.PublicKeyCache do
   defp get_public_key(cert) do
     :public_key.der_decode(:RSAPublicKey, cert |> elem(1) |> elem(7) |> elem(2))
   end
-
 end
