@@ -17,6 +17,12 @@ defmodule ExAws.SNS do
     :display_name |
     :delivery_policy
 
+  @type topic_attributes :: [
+    {atom, binary}
+    | {atom, boolean}
+    | {atom, integer}
+  ]
+
   @doc "List topics"
   @spec list_topics() :: ExAws.Operation.Query.t
   @spec list_topics(opts :: [next_token: binary]) :: ExAws.Operation.Query.t
@@ -30,8 +36,14 @@ defmodule ExAws.SNS do
 
   @doc "Create topic"
   @spec create_topic(topic_name :: topic_name) :: ExAws.Operation.Query.t
-  def create_topic(topic_name) do
-    request(:create_topic, %{"Name" => topic_name})
+  @spec create_topic(topic_name :: topic_name, attributes :: topic_attributes) :: ExAws.Operation.Query.t
+  def create_topic(topic_name, attributes \\ []) do
+    params =
+      attributes
+      |> build_attrs()
+      |> Map.put("Name", topic_name)
+
+    request(:create_topic, params)
   end
 
   @doc "Get topic attributes"

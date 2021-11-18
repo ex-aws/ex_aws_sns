@@ -7,9 +7,20 @@ defmodule ExAws.SNSTest do
     assert expected == SNS.list_topics().params
   end
 
-  test "#create_topic" do
+  test "create_topic/1" do
     expected = %{"Action" => "CreateTopic", "Name" => "test_topic"}
     assert expected == SNS.create_topic("test_topic").params
+  end
+
+  test "create_topic/2" do
+    expected = %{
+      "Action" => "CreateTopic",
+      "Name" => "test_topic.fifo",
+      "Attributes.entry.1.name" => "FifoTopic",
+      "Attributes.entry.1.value" => true
+    }
+
+    assert expected == SNS.create_topic("test_topic.fifo", [{:fifo_topic, true}]).params
   end
 
   test "#get_topic_attributes" do
