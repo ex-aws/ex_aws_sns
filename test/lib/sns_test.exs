@@ -415,6 +415,8 @@ defmodule ExAws.SNSTest do
              ).params
   end
 
+  # Requires AWS access
+  @tag :skip
   describe "verify_message/1" do
     setup [:add_verify_message]
 
