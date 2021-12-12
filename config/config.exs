@@ -8,27 +8,6 @@ use Mix.Config
 # if you want to provide default values for your application for
 # 3rd-party users, it should be done in your "mix.exs" file.
 
-aws_env =
-  System.get_env(
-    "AWS_PROFILE",
-    System.get_env("AWS_DEFAULT_PROFILE", "default")
-  )
-
-aws_region =
-  System.get_env(
-    "AWS_REGION",
-    System.get_env("AWS_DEFAULT_REGION", "us-east-1")
-  )
-
-config :ex_aws,
-  access_key_id: [{:system, "AWS_ACCESS_KEY_ID"}, {:awscli, aws_env, 30}, :instance_role],
-  secret_access_key: [
-    {:system, "AWS_SECRET_ACCESS_KEY"},
-    {:awscli, aws_env, 30},
-    :instance_role
-  ],
-  region: aws_region
-
 # You can configure your application as:
 #
 #     config :ex_aws_sns, key: :value
