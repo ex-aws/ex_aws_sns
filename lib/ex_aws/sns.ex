@@ -363,7 +363,7 @@ defmodule ExAws.SNS do
 
   @type list_endpoints_by_platform_application_opt :: {:next_token, binary}
 
-  @doc "List endpooints and endpoint attributes for devices in a supported push notification service."
+  @doc "List endpoints and endpoint attributes for devices in a supported push notification service."
   @spec list_endpoints_by_platform_application(topic_arn :: topic_arn) ::
           ExAws.Operation.Query.t()
   @spec list_endpoints_by_platform_application(topic_arn :: topic_arn, [
