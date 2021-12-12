@@ -5,7 +5,7 @@ defmodule ExAws.SNS.Application do
     import Supervisor.Spec, warn: false
 
     children = [
-      worker(ExAws.SNS.PublicKeyCache, [[name: ExAws.SNS.PublicKeyCache]]),
+      {ExAws.SNS.PublicKeyCache, name: ExAws.SNS.PublicKeyCache}
     ]
 
     opts = [strategy: :one_for_one, name: ExAws.SNS.Supervisor]

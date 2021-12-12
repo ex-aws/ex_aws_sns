@@ -1,11 +1,17 @@
 # ExAws.SNS
 
+[![Module Version](https://img.shields.io/hexpm/v/ex_aws_sns.svg)](https://hex.pm/packages/ex_aws_sns)
+[![Hex Docs](https://img.shields.io/badge/hex-docs-lightgreen.svg)](https://hexdocs.pm/ex_aws_sns/)
+[![Total Download](https://img.shields.io/hexpm/dt/ex_aws_sns.svg)](https://hex.pm/packages/ex_aws_sns)
+[![License](https://img.shields.io/hexpm/l/ex_aws_sns.svg)](https://github.com/ex-aws/ex_aws_sns/blob/master/LICENSE)
+[![Last Updated](https://img.shields.io/github/last-commit/ex-aws/ex_aws_sns.svg)](https://github.com/ex-aws/ex_aws_sns/commits/master)
+
 Service module for https://github.com/ex-aws/ex_aws
 
 ## Installation
 
-The package can be installed by adding `ex_aws_sns` to your list of dependencies in `mix.exs`
-along with `:ex_aws` and your preferred JSON codec / http client
+The package can be installed by adding `:ex_aws_sns` to your list of dependencies in `mix.exs`
+along with `:ex_aws` and your preferred JSON codec / HTTP client:
 
 ```elixir
 def deps do
@@ -18,13 +24,11 @@ def deps do
 end
 ```
 
-Documentation can be found at [https://hexdocs.pm/ex_aws_sns](https://hexdocs.pm/ex_aws_sns).
-
-## License
+## Copyright and License
 
 The MIT License (MIT)
 
-Copyright (c) 2014 CargoSense, Inc.
+Copyright (c) 2017 CargoSense, Inc.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

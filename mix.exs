@@ -9,14 +9,17 @@ defmodule ExAws.SNS.Mixfile do
   def project do
     [
       app: :ex_aws_sns,
+      name: @name,
       version: @version,
       elixir: "~> 1.5",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-      name: @name,
       package: package(),
-      docs: [main: @name, source_ref: "v#{@version}", source_url: @url]
+      dialyzer: [
+        plt_add_apps: [:mix, :hackney, :configparser_ex, :jsx]
+      ],
+      docs: docs()
     ]
   end
 
@@ -33,15 +36,17 @@ defmodule ExAws.SNS.Mixfile do
   defp elixirc_paths(:test), do: ["lib", "test/support"]
   defp elixirc_paths(_), do: ["lib"]
 
-  # Run "mix help compile.app" to learn about applications.
   def application do
-    [extra_applications: [:logger], mod: {ExAws.SNS.Application, []}]
+    [
+      extra_applications: [:logger],
+      mod: {ExAws.SNS.Application, []}
+    ]
   end
 
-  # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:ex_doc, ">= 0.0.0", only: :dev},
+      {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false},
+      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
       {:hackney, ">= 0.0.0", only: [:dev, :test]},
       {:sweet_xml, ">= 0.0.0", only: [:dev, :test]},
       {:poison, ">= 0.0.0", only: [:dev, :test]},
@@ -54,5 +59,19 @@ defmodule ExAws.SNS.Mixfile do
       "LOCAL" -> {:ex_aws, path: "../ex_aws"}
       _ -> {:ex_aws, "~> 2.0"}
     end
+  end
+
+  defp docs do
+    [
+      extras: [
+        "CHANGELOG.md",
+        "CONTRIBUTING.md",
+        "README.md"
+      ],
+      main: "readme",
+      source_url: @url,
+      source_ref: "v#{@version}",
+      formatters: ["html"]
+    ]
   end
 end
