@@ -19,7 +19,7 @@ defmodule ExAws.SNS.Mixfile do
       docs: [main: @name, source_ref: "v#{@version}", source_url: @url],
       dialyzer: [
         plt_add_apps: [:mix, :hackney, :configparser_ex, :jsx]
-      ],
+      ]
     ]
   end
 
