@@ -186,7 +186,7 @@ defmodule ExAws.SNS do
   @spec create_platform_endpoint(
           platform_application_arn :: platform_application_arn,
           token :: binary,
-          custom_user_data :: binary
+          custom_user_data :: binary | nil
         ) :: ExAws.Operation.Query.t()
   def create_platform_endpoint(platform_application_arn, token, custom_user_data \\ nil) do
     attrs = %{

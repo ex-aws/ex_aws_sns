@@ -16,7 +16,10 @@ defmodule ExAws.SNS.Mixfile do
       deps: deps(),
       name: @name,
       package: package(),
-      docs: [main: @name, source_ref: "v#{@version}", source_url: @url]
+      docs: [main: @name, source_ref: "v#{@version}", source_url: @url],
+      dialyzer: [
+        plt_add_apps: [:mix, :hackney, :configparser_ex, :jsx]
+      ],
     ]
   end
 
@@ -41,6 +44,7 @@ defmodule ExAws.SNS.Mixfile do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      {:dialyxir, "~> 1.0", only: [:dev, :test], runtime: false},
       {:ex_doc, ">= 0.0.0", only: :dev},
       {:hackney, ">= 0.0.0", only: [:dev, :test]},
       {:sweet_xml, ">= 0.0.0", only: [:dev, :test]},
