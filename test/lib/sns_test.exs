@@ -171,6 +171,23 @@ defmodule ExAws.SNSTest do
              ).params
   end
 
+  test "#publish FIFO message" do
+    expected = %{
+      "Action" => "Publish",
+      "Message" => "Hello World",
+      "TopicArn" => "arn:aws:sns:us-east-1:982071696186:test-topic",
+      "MessageDeduplicationId" => "dedupe-id",
+      "MessageGroupId" => "group-id"
+    }
+
+    assert expected ==
+             SNS.publish("Hello World",
+               topic_arn: "arn:aws:sns:us-east-1:982071696186:test-topic",
+               message_group_id: "group-id",
+               message_deduplication_id: "dedupe-id"
+             ).params
+  end
+
   test "#subscribe" do
     expected = %{
       "Action" => "Subscribe",

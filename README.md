@@ -24,6 +24,49 @@ def deps do
 end
 ```
 
+## Usage
+
+### Publishing a message
+
+Here is an example of sending a message to a standard topic and returning the response to the caller
+
+```elixir
+    message
+    |> ExAws.SNS.publish(
+      topic_arn: "arn:aws:sns:us-east-1:000000000000:sns-topic-name"
+    )
+    |> ExAws.request()
+    |> case do
+      {:error, {_error_type, error_code, %{code: message}}} ->
+        {:error, "Response returned with http error code #{error_code} and message #{message}"}
+      {:error, {_error_type, error_code, message}} ->
+        {:error, "Response returned with http error code #{error_code} and message #{message}"}
+      response -> response
+    end
+```
+
+The following code demonstrates sending a message to a FIFO topic. [message_group_id](https://docs.aws.amazon.com/sns/latest/dg/fifo-message-grouping.html) defines partitions in
+the topic to make sure messages in that group are processed one at a time. If all messages must be processed in order
+use a static value for this attribute. [message_deduplication_id](https://docs.aws.amazon.com/sns/latest/dg/fifo-message-dedup.html) defines an id used to determine if two events are the same
+and deduplicate them in the topic. Event IDs or hashes of the content are good for this.
+
+```elixir
+    message
+    |> ExAws.SNS.publish(
+      topic_arn: "arn:aws:sns:us-east-1:000000000000:sns-topic-name.fifo",
+      message_group_id: "some group which requires messages processed in order",
+      message_deduplication_id: "some id to prevent the same message from being published twice"
+    )
+    |> ExAws.request()
+    |> case do
+      {:error, {_error_type, error_code, %{code: message}}} ->
+        {:error, "Response returned with http error code #{error_code} and message #{message}"}
+      {:error, {_error_type, error_code, message}} ->
+        {:error, "Response returned with http error code #{error_code} and message #{message}"}
+      response -> response
+    end
+```
+
 ## Copyright and License
 
 The MIT License (MIT)

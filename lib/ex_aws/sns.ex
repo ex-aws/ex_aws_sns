@@ -86,6 +86,8 @@ defmodule ExAws.SNS do
           | {:phone_number, binary}
           | {:target_arn, binary}
           | {:topic_arn, binary}
+          | {:message_group_id, binary}
+          | {:message_deduplication_id, binary}
         ]
 
   @doc """
