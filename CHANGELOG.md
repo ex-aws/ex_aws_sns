@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.3.0 - 2022-05-15
+- Increase minimum Elixir verion to 1.10
+- Update publish_opts type to support FIFO topics
+
 ## v2.2.0 - 2021-12-12
 - Add CI, dependabot and auto-formatting
 - Fix return type spec on `verify_message`
