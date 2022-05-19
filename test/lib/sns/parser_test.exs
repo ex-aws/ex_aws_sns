@@ -773,4 +773,22 @@ defmodule ExAws.SNS.ParserTest do
     {:ok, %{body: parsed_doc}} = Parsers.parse(rsp, :opt_in_phone_number)
     assert parsed_doc[:request_id] == "5839a693-c333-5df8-b06f-f71576ff9bc1"
   end
+
+  test "#parsing a check_if_phone_number_is_opted_out response" do
+    rsp =
+      """
+        <CheckIfPhoneNumberIsOptedOutResponse xmlns="http://sns.amazonaws.com/doc/2010-03-31/">
+          <CheckIfPhoneNumberIsOptedOutResult>
+            <isOptedOut>false</isOptedOut>
+          </CheckIfPhoneNumberIsOptedOutResult>
+          <ResponseMetadata>
+            <RequestId>5839a693-c333-5df8-b06f-f71576ff9bc1</RequestId>
+          </ResponseMetadata>
+        </CheckIfPhoneNumberIsOptedOutResponse>
+      """
+      |> to_success
+
+    {:ok, %{body: parsed_doc}} = Parsers.parse(rsp, :check_if_phone_number_is_opted_out)
+    assert parsed_doc[:request_id] == "5839a693-c333-5df8-b06f-f71576ff9bc1"
+  end
 end

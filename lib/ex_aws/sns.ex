@@ -327,6 +327,12 @@ defmodule ExAws.SNS do
     request(:opt_in_phone_number, %{"phoneNumber" => phone_number})
   end
 
+  @doc "Check if phone number is opted out."
+  @spec check_if_phone_number_is_opted_out(phone_number :: binary) :: ExAws.Operation.Query.t()
+  def check_if_phone_number_is_opted_out(phone_number) do
+    request(:check_if_phone_number_is_opted_out, %{"phoneNumber" => phone_number})
+  end
+
   ## Endpoints
   ######################
 
