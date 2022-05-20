@@ -351,6 +351,24 @@ if Code.ensure_loaded?(SweetXml) do
       {:ok, Map.put(resp, :body, parsed_body)}
     end
 
+    def parse({:ok, %{body: xml} = resp}, :check_if_phone_number_is_opted_out) do
+      parsed_body =
+        xml
+        |> SweetXml.xpath(~x"//CheckIfPhoneNumberIsOptedOutResponse",
+          is_opted_out: ~x"./CheckIfPhoneNumberIsOptedOutResult/isOptedOut/text()"s,
+          request_id: request_id_xpath()
+        )
+
+      parsed_body =
+        Map.put(
+          parsed_body,
+          :is_opted_out,
+          parsed_body[:is_opted_out] == "true"
+        )
+
+      {:ok, Map.put(resp, :body, parsed_body)}
+    end
+
     def parse(val, _), do: val
 
     defp request_id_xpath do
