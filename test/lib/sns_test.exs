@@ -171,6 +171,31 @@ defmodule ExAws.SNSTest do
              ).params
   end
 
+  test "#publish with string array message attributes" do
+    expected = %{
+      "Action" => "Publish",
+      "Message" => "Hello World",
+      "TopicArn" => "arn:aws:sns:us-east-1:982071696186:test-topic",
+      "MessageAttributes.entry.1.Name" => "SenderIDs",
+      "MessageAttributes.entry.1.Value.DataType" => "String.Array",
+      "MessageAttributes.entry.1.Value.StringValue" => ["sender1", "sender2"]
+    }
+
+    attrs = [
+      %{
+        name: "SenderIDs",
+        data_type: :string_array,
+        value: {:string_array, ["sender1", "sender2"]}
+      }
+    ]
+
+    assert expected ==
+             SNS.publish("Hello World",
+               topic_arn: "arn:aws:sns:us-east-1:982071696186:test-topic",
+               message_attributes: attrs
+             ).params
+  end
+
   test "#publish FIFO message" do
     expected = %{
       "Action" => "Publish",

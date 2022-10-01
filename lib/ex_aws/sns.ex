@@ -76,7 +76,7 @@ defmodule ExAws.SNS do
 
   @type message_attribute :: %{
           :name => binary,
-          :data_type => :string | :number | :binary,
+          :data_type => :string | :number | :binary | :string_array,
           :value => {:string, binary} | {:binary, binary}
         }
   @type publish_opts :: [
@@ -125,17 +125,31 @@ defmodule ExAws.SNS do
     |> Enum.reduce(%{}, &build_message_attribute/2)
   end
 
+  @data_types %{
+    string: "String",
+    number: "Number",
+    binary: "Binary",
+    string_array: "String.Array"
+  }
+
   def build_message_attribute(
-        {%{name: name, data_type: data_type, value: {value_type, value}}, i},
+        {%{name: name, data_type: data_type, value: value}, i},
         params
       ) do
     param_root = "MessageAttributes.entry.#{i + 1}"
-    value_type = value_type |> to_string |> String.capitalize()
 
     params
     |> Map.put(param_root <> ".Name", name)
-    |> Map.put(param_root <> ".Value.#{value_type}Value", value)
-    |> Map.put(param_root <> ".Value.DataType", data_type |> to_string |> String.capitalize())
+    |> Map.put(param_root <> ".Value.DataType", @data_types[data_type])
+    |> put_value(param_root, value)
+  end
+
+  defp put_value(params, param_root, {:binary, value}) do
+    params |> Map.put(param_root <> ".Value.BinaryValue", value)
+  end
+
+  defp put_value(params, param_root, {_, value}) do
+    params |> Map.put(param_root <> ".Value.StringValue", value)
   end
 
   ## Platform
