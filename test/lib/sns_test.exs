@@ -178,7 +178,7 @@ defmodule ExAws.SNSTest do
       "TopicArn" => "arn:aws:sns:us-east-1:982071696186:test-topic",
       "MessageAttributes.entry.1.Name" => "SenderIDs",
       "MessageAttributes.entry.1.Value.DataType" => "String.Array",
-      "MessageAttributes.entry.1.Value.StringValue" => ["sender1", "sender2"]
+      "MessageAttributes.entry.1.Value.StringValue" => "[\"sender1\",\"sender2\"]"
     }
 
     attrs = [
