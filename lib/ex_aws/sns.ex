@@ -132,6 +132,8 @@ defmodule ExAws.SNS do
     string_array: "String.Array"
   }
 
+  @json_codec Application.fetch_env!(:ex_aws, :json_codec)
+
   def build_message_attribute(
         {%{name: name, data_type: data_type, value: value}, i},
         params
@@ -146,6 +148,10 @@ defmodule ExAws.SNS do
 
   defp put_value(params, param_root, {:binary, value}) do
     params |> Map.put(param_root <> ".Value.BinaryValue", value)
+  end
+
+  defp put_value(params, param_root, {:string_array, value}) do
+    params |> Map.put(param_root <> ".Value.StringValue", @json_codec.encode!(value))
   end
 
   defp put_value(params, param_root, {_, value}) do
