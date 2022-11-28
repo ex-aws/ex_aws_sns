@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.3.1 - 2022-11-28
+- Add support for CheckIfPhoneNumberIsOptedOut action
+- Add "String.Array" data type support
+
 ## v2.3.0 - 2022-05-15
 - Increase minimum Elixir verion to 1.10
 - Update publish_opts type to support FIFO topics
