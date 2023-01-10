@@ -1,5 +1,8 @@
 # Changelog
 
+## v2.3.2 - 2023-01-10
+- Make `json_codec` setting optional, defaulting to Jason
+
 ## v2.3.1 - 2022-11-28
 - Add support for CheckIfPhoneNumberIsOptedOut action
 - Add "String.Array" data type support
