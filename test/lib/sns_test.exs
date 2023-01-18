@@ -213,6 +213,69 @@ defmodule ExAws.SNSTest do
              ).params
   end
 
+  test "#publish_batch with string array message attributes" do
+    expected = %{
+      "Action" => "PublishBatch",
+      "PublishBatchRequestEntries.member.1.Id" => 1,
+      "PublishBatchRequestEntries.member.1.Message" => "Hello World Message 1",
+      "PublishBatchRequestEntries.member.1.MessageAttributes.entry.1.Name" => "SenderIDs",
+      "PublishBatchRequestEntries.member.1.MessageAttributes.entry.1.Value.DataType" => "String.Array",
+      "PublishBatchRequestEntries.member.1.MessageAttributes.entry.1.Value.StringValue" => "[\"sender1\",\"sender2\"]",
+      "PublishBatchRequestEntries.member.1.MessageDeduplicationId" => "dedupe-id1",
+      "PublishBatchRequestEntries.member.1.MessageGroupId" => "group-id",
+      "PublishBatchRequestEntries.member.2.Id" => 2,
+      "PublishBatchRequestEntries.member.2.Message" => "Hello World Message 2",
+      "PublishBatchRequestEntries.member.2.MessageAttributes.entry.1.Name" => "SenderIDs",
+      "PublishBatchRequestEntries.member.2.MessageAttributes.entry.1.Value.DataType" => "String.Array",
+      "PublishBatchRequestEntries.member.2.MessageAttributes.entry.1.Value.StringValue" => "[\"sender1\",\"sender2\"]",
+      "PublishBatchRequestEntries.member.2.MessageDeduplicationId" => "dedupe-id2",
+      "PublishBatchRequestEntries.member.2.MessageGroupId" => "group-id",
+      "PublishBatchRequestEntries.member.3.Id" => 3,
+      "PublishBatchRequestEntries.member.3.Message" => "Hello World Message 3",
+      "PublishBatchRequestEntries.member.3.MessageAttributes.entry.1.Name" => "SenderIDs",
+      "PublishBatchRequestEntries.member.3.MessageAttributes.entry.1.Value.DataType" => "String.Array",
+      "PublishBatchRequestEntries.member.3.MessageAttributes.entry.1.Value.StringValue" => "[\"sender1\",\"sender2\"]",
+      "PublishBatchRequestEntries.member.3.MessageDeduplicationId" => "dedupe-id3",
+      "PublishBatchRequestEntries.member.3.MessageGroupId" => "group-id",
+      "TopicArn" => "arn:aws:sns:us-east-1:982071696186:test-topic"
+    }
+
+    attrs = [
+      %{
+        name: "SenderIDs",
+        data_type: :string_array,
+        value: {:string_array, ["sender1", "sender2"]}
+      }
+    ]
+
+    assert expected ==
+             SNS.publish_batch([
+               %{
+                 id: 1,
+                 message: "Hello World Message 1",
+                 message_attributes: attrs,
+                 message_group_id: "group-id",
+                 message_deduplication_id: "dedupe-id1"
+               },
+               %{
+                 id: 2,
+                 message: "Hello World Message 2",
+                 message_attributes: attrs,
+                 message_group_id: "group-id",
+                 message_deduplication_id: "dedupe-id2"
+               },
+               %{
+                 id: 3,
+                 message: "Hello World Message 3",
+                 message_attributes: attrs,
+                 message_group_id: "group-id",
+                 message_deduplication_id: "dedupe-id3"
+               }
+             ],
+               "arn:aws:sns:us-east-1:982071696186:test-topic"
+             ).params
+  end
+
   test "#subscribe" do
     expected = %{
       "Action" => "Subscribe",
