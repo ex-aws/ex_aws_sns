@@ -147,6 +147,67 @@ defmodule ExAws.SNS.ParserTest do
     assert parsed_doc[:request_id] == "f187a3c1-376f-11df-8963-01868b7c937a"
   end
 
+  test "#parsing a publish_batch response" do
+    rsp =
+      """
+      <PublishBatchResponse xmlns=\"http://sns.amazonaws.com/doc/2010-03-31/\">
+      <PublishBatchResult>
+      <Failed/>
+      <Successful>
+      <member>
+        <MessageId>099872d8-47ec-5c05-a303-2e9a47c6fe9b</MessageId>
+        <Id>9</Id>
+      </member>
+      <member>
+        <MessageId>7a42b577-060f-5d8d-8a89-e9350625bf13</MessageId>
+        <Id>8</Id>
+      </member>
+      <member>
+        <MessageId>632cb10a-3b34-5464-84c3-ed483b1eb6fa</MessageId>
+        <Id>7</Id>
+      </member>
+      <member>
+        <MessageId>0de82c6e-d8c8-5c4c-9a53-702cd8e24ed2</MessageId>
+        <Id>6</Id>
+      </member>
+      <member>
+        <MessageId>ec6ccebc-a886-5d7d-9d30-92fea8acefe3</MessageId>
+        <Id>5</Id>
+      </member>
+      <member>
+        <MessageId>6491892f-27d6-521c-ba7b-d56d27fc6082</MessageId>
+        <Id>4</Id>
+      </member>
+      <member>
+        <MessageId>e0333d93-7e22-5208-8a84-61d17e082096</MessageId>
+        <Id>3</Id>
+      </member>
+      <member>
+        <MessageId>be87da3d-b5ee-58c6-96de-867fb5c48a58</MessageId>
+        <Id>2</Id>
+      </member>
+      <member>
+        <MessageId>db74ac21-7eda-59c7-bf57-f0637ef0bb59</MessageId>
+        <Id>1</Id>
+      </member>
+      <member>
+        <MessageId>30462684-1201-5b57-ad5c-7ac6122b89c9</MessageId>
+        <Id>0</Id>
+      </member>
+      </Successful>
+      </PublishBatchResult>
+      <ResponseMetadata>
+      <RequestId>3d2d9a09-b2f2-5f49-93c5-c64bb2d82dd7</RequestId>
+      </ResponseMetadata>
+      </PublishBatchResponse>
+      """
+      |> to_success
+
+    {:ok, %{body: parsed_doc}} = Parsers.parse(rsp, :publish_batch)
+    assert Enum.count(parsed_doc[:successes]) == 10
+    assert parsed_doc[:request_id] == "3d2d9a09-b2f2-5f49-93c5-c64bb2d82dd7"
+  end
+
   test "#parsing a create_platform_application response" do
     rsp =
       """

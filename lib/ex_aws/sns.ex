@@ -119,6 +119,46 @@ defmodule ExAws.SNS do
     request(:publish, params)
   end
 
+  @type publish_batch_request_entry :: %{
+           required(:id) => binary,
+           required(:message) => binary,
+           optional(:message_attributes) => [message_attribute],
+           optional(:message_deduplication_id) => binary,
+           optional(:message_group_id) => binary,
+           optional(:message_structure) => binary,
+           optional(:subject) => binary
+           }
+
+  @spec publish_batch(publish_batch_requests :: [publish_batch_request_entry, ...], topic_arn :: topic_arn) :: ExAws.Operation.Query.t()
+  def publish_batch(publish_batch_requests, topic_arn) do
+    params =
+      publish_batch_requests
+      |> Enum.with_index()
+      |> Enum.reduce(%{}, fn {publish_batch_request, index}, params ->
+        Map.merge(params, format_publish_batch_message(publish_batch_request, index))
+      end)
+      |> Map.put("TopicArn", topic_arn)
+
+    request(:publish_batch, params)
+  end
+
+  defp format_publish_batch_message(publish_batch_request, index) do
+    prefix = "PublishBatchRequestEntries.member.#{index + 1}."
+
+    message_attrs =
+      publish_batch_request
+      |> Map.get(:message_attributes, [])
+      |> build_message_attributes
+
+    publish_batch_request
+    |> Map.drop([:message_attributes])
+    |> camelize_keys
+    |> Map.merge(message_attrs)
+    |> Enum.reduce(%{}, fn {key, value}, params ->
+      Map.put(params, prefix <> key, value)
+    end)
+  end
+
   defp build_message_attributes(attrs) do
     attrs
     |> Stream.with_index()
