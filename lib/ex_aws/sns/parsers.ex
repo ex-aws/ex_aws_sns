@@ -85,21 +85,21 @@ if Code.ensure_loaded?(SweetXml) do
       parsed_body =
         xml
         |> SweetXml.xpath(~x"//PublishBatchResponse",
-             request_id: request_id_xpath(),
-             successes: [
-               ~x"./PublishBatchResult/Successful/member"l,
-               id: ~x"./Id/text()"s,
-               message_id: ~x"./MessageId/text()"s
-             ],
-             failures: [
-               ~x"./PublishBatchResult/Failed/member"l,
-               code: ~x"./Code/text()"s,
-               id: ~x"./Id/text()"s,
-               message: ~x"./Message/text()"s,
-               # TODO Cast to boolean
-               sender_fault: ~x"./SenderFault/text()"s
-             ]
-           )
+          request_id: request_id_xpath(),
+          successes: [
+            ~x"./PublishBatchResult/Successful/member"l,
+            id: ~x"./Id/text()"s,
+            message_id: ~x"./MessageId/text()"s
+          ],
+          failures: [
+            ~x"./PublishBatchResult/Failed/member"l,
+            code: ~x"./Code/text()"s,
+            id: ~x"./Id/text()"s,
+            message: ~x"./Message/text()"s,
+            # TODO Cast to boolean
+            sender_fault: ~x"./SenderFault/text()"s
+          ]
+        )
 
       {:ok, Map.put(resp, :body, parsed_body)}
     end

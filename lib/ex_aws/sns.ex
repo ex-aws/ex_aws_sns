@@ -120,16 +120,19 @@ defmodule ExAws.SNS do
   end
 
   @type publish_batch_request_entry :: %{
-           required(:id) => binary,
-           required(:message) => binary,
-           optional(:message_attributes) => [message_attribute],
-           optional(:message_deduplication_id) => binary,
-           optional(:message_group_id) => binary,
-           optional(:message_structure) => binary,
-           optional(:subject) => binary
-           }
+          required(:id) => binary,
+          required(:message) => binary,
+          optional(:message_attributes) => [message_attribute],
+          optional(:message_deduplication_id) => binary,
+          optional(:message_group_id) => binary,
+          optional(:message_structure) => binary,
+          optional(:subject) => binary
+        }
 
-  @spec publish_batch(publish_batch_requests :: [publish_batch_request_entry, ...], topic_arn :: topic_arn) :: ExAws.Operation.Query.t()
+  @spec publish_batch(
+          publish_batch_requests :: [publish_batch_request_entry, ...],
+          topic_arn :: topic_arn
+        ) :: ExAws.Operation.Query.t()
   def publish_batch(publish_batch_requests, topic_arn) do
     params =
       publish_batch_requests
