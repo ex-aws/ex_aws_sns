@@ -1,5 +1,8 @@
 # Changelog
 
+## v2.3.3 - 2023-06-26
+- Add `publish_batch` functionality
+
 ## v2.3.2 - 2023-01-10
 - Make `json_codec` setting optional, defaulting to Jason
 
