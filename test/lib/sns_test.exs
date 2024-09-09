@@ -16,7 +16,7 @@ defmodule ExAws.SNSTest do
     expected = %{
       "Action" => "CreateTopic",
       "Name" => "test_topic.fifo",
-      "Attributes.entry.1.name" => "FifoTopic",
+      "Attributes.entry.1.key" => "FifoTopic",
       "Attributes.entry.1.value" => true
     }
 
@@ -494,11 +494,11 @@ defmodule ExAws.SNSTest do
   test "#set_endpoint_attributes" do
     expected = %{
       "Action" => "SetEndpointAttributes",
-      "Attributes.entry.1.name" => "Token",
+      "Attributes.entry.1.key" => "Token",
       "Attributes.entry.1.value" => "1234",
-      "Attributes.entry.2.name" => "Enabled",
+      "Attributes.entry.2.key" => "Enabled",
       "Attributes.entry.2.value" => false,
-      "Attributes.entry.3.name" => "CustomUserData",
+      "Attributes.entry.3.key" => "CustomUserData",
       "Attributes.entry.3.value" => "blah",
       "EndpointArn" => "test-endpoint-arn"
     }
