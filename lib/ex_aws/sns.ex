@@ -577,7 +577,7 @@ defmodule ExAws.SNS do
     prefix = "Attributes.entry.#{index}."
 
     %{}
-    |> Map.put(prefix <> "name", format_param_key(name))
+    |> Map.put(prefix <> "key", format_param_key(name))
     |> Map.put(prefix <> "value", value)
   end
 
