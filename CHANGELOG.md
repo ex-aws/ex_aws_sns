@@ -1,5 +1,8 @@
 # Changelog
 
+## v2.3.4 - 2024-09-10
+- Update use of `name` to `key` to support both AWS and Localstack
+
 ## v2.3.3 - 2023-06-26
 - Add `publish_batch` functionality
 
