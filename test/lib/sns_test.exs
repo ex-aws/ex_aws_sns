@@ -537,8 +537,13 @@ defmodule ExAws.SNSTest do
   describe "verify_message/1" do
     setup [:add_verify_message]
 
-    test "validate a pristine message from SNS", %{verify_message: message} do
+    test "validate a pristine message from SNS and check that the key is cached", %{
+      verify_message: message
+    } do
       assert :ok == SNS.verify_message(message)
+
+      url = message["SigningCertURL"]
+      assert [{^url, {:RSAPublicKey, _, _}}] = :ets.lookup(ExAws.SNS.PublicKeyCache, url)
     end
 
     test "fails with tampered message", %{verify_message: message} do
@@ -552,25 +557,44 @@ defmodule ExAws.SNSTest do
     test "fails with an invalid signature version", %{verify_message: message} do
       assert {:error, _message} = SNS.verify_message(message |> Map.put("SignatureVersion", "2"))
     end
+
+    test "fails with invalid certificate URL", %{verify_message: message} do
+      assert {:error, _message} =
+               SNS.verify_message(
+                 message
+                 |> Map.put("SigningCertURL", "http://example.com/cert.pem")
+               )
+    end
+
+    test "fails with invalid certificate scheme", %{verify_message: message} do
+      assert {:error, _message} =
+               SNS.verify_message(
+                 message
+                 |> Map.put(
+                   "SigningCertURL",
+                   String.replace(message["SigningCertURL"], "https", "http")
+                 )
+               )
+    end
   end
 
   defp add_verify_message(context) do
     message = %{
       "Type" => "SubscriptionConfirmation",
-      "MessageId" => "c98bfcda-56fc-459e-9257-88b9553e22d7",
+      "MessageId" => "72e8378d-e4e4-4a17-b3ef-89baa9c6b615",
       "Token" =>
-        "2336412f37fb687f5d51e6e241d44a2dc0dc1808be349325be7bdd46c777d7461673f5800c81ae6d5ec8e7ff8e24985fadefa80d9d9471fdf3091a6c239105468b29615b925b53382a5b69a53872116c1d1dc3af2122db5399d6be5cea19ef72aa09a8309e00f296e4e461561bb2397d",
-      "TopicArn" => "arn:aws:sns:eu-west-1:511293508251:ex_aws_test",
+        "2336412f37fb687f5d51e6e2425929f528fce8aa114aa3c70e8756de60608f0bd9e37d5388ff22d52a04ce89a27efa4104bcc2e8233ff7a9e81294fe7b0cd1df7b23e2133b3bfc7a5ad4d12a0989c8f3c340ef78035d2026701832154651e13f8e8acb64a48f8a6647ffd022a1250648",
+      "TopicArn" => "arn:aws:sns:us-east-1:206176965479:ex_aws_test",
       "Message" =>
-        "You have chosen to subscribe to the topic arn:aws:sns:eu-west-1:511293508251:ex_aws_test.\nTo confirm the subscription, visit the SubscribeURL included in this message.",
+        "You have chosen to subscribe to the topic arn:aws:sns:us-east-1:206176965479:ex_aws_test.\nTo confirm the subscription, visit the SubscribeURL included in this message.",
       "SubscribeURL" =>
-        "https://sns.eu-west-1.amazonaws.com/?Action=ConfirmSubscription&TopicArn=arn:aws:sns:eu-west-1:511293508251:ex_aws_test&Token=2336412f37fb687f5d51e6e241d44a2dc0dc1808be349325be7bdd46c777d7461673f5800c81ae6d5ec8e7ff8e24985fadefa80d9d9471fdf3091a6c239105468b29615b925b53382a5b69a53872116c1d1dc3af2122db5399d6be5cea19ef72aa09a8309e00f296e4e461561bb2397d",
-      "Timestamp" => "2016-11-16T01:52:21.709Z",
+        "https://sns.us-east-1.amazonaws.com/?Action=ConfirmSubscription&TopicArn=arn:aws:sns:us-east-1:206176965479:ex_aws_test&Token=2336412f37fb687f5d51e6e2425929f528fce8aa114aa3c70e8756de60608f0bd9e37d5388ff22d52a04ce89a27efa4104bcc2e8233ff7a9e81294fe7b0cd1df7b23e2133b3bfc7a5ad4d12a0989c8f3c340ef78035d2026701832154651e13f8e8acb64a48f8a6647ffd022a1250648",
+      "Timestamp" => "2026-05-20T05:42:47.203Z",
       "SignatureVersion" => "1",
       "Signature" =>
-        "lAUpZvBd+bA0bBFOl//ZR8+Ud1tMQR9QDiRSS0VrCPIaY67zURqTeRhmSQFBVsqGOBM+MHnCinDC5HttGGv9L2N15urvj3L5YfZOA87TLvHPJzxiA2XCD40lrSFBRDGhO7jq49hwY48K56jik9CFiMw84jLxKMrdw9KkHYAyWt12NiZWoLWa/PHbT7tmlh1+Tkc5EN4u/t3tGwS4bSZOXWq0DIKh+rE7U84Yxyph9R9ykEArEAwXEiGBfkleXpFB4AtF4PMmXXETnBI770v24LWgsopVUIBV+p1jEJi1Mcg9D/+00BnkAFFq4S0Foryr7xA/mgPZJNTlV2nK7eaQ4g==",
+        "Lc5HVdFIcnNny+IpGawrITsugH0m4AfGJUKm8vypd1Mt7Ly/EcnajiUsNa515gj3wBuy/EYXl8EyE+HAsCII7JfKXy8Ho6mt7RFoFP8r+nfBhipTOPipyyQdsFVofQnV3YpM6gx4Cv9LRlE2CCDp4j7wbL1AejNRwuDBXctbNMd/OGMtodOEsyBJ8gFqgPn5LmLEcxwtN07lPx0mO+CTct1cinzoigQo7KXNrklj3iW4L2jTgt8VsxDEAW3/sGaHaujLMeW2kft+3ebGgxBECkoTUkhwqmbXkxIB3c/TAVNvX+svz29Z3zNXoXtB3GOgeEC00/IoftBmISNOcA7B7g==",
       "SigningCertURL" =>
-        "https://sns.eu-west-1.amazonaws.com/SimpleNotificationService-b95095beb82e8f6a046b3aafc7f4149a.pem"
+        "https://sns.us-east-1.amazonaws.com/SimpleNotificationService-7506a1e35b36ef5a444dd1a8e7cc3ed8.pem"
     }
 
     context |> Map.put(:verify_message, message)
