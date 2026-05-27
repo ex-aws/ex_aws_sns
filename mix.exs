@@ -38,7 +38,7 @@ defmodule ExAws.SNS.Mixfile do
 
   def application do
     [
-      extra_applications: [:logger],
+      extra_applications: [:logger, :public_key],
       mod: {ExAws.SNS.Application, []}
     ]
   end
