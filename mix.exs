@@ -27,7 +27,8 @@ defmodule ExAws.SNS.Mixfile do
     [
       description: "#{@name} service package",
       files: ["lib", "config", "mix.exs", "README*"],
-      maintainers: ["Ben Wilson"],
+      exclude_patterns: ["_build", "deps", "test", ~r/.*~/],
+      maintainers: ["Bernard Duggan", "Ben Wilson"],
       licenses: ["MIT"],
       links: %{github: @url}
     ]
