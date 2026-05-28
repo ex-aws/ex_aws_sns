@@ -11,7 +11,7 @@ defmodule ExAws.SNS.Mixfile do
       app: :ex_aws_sns,
       name: @name,
       version: @version,
-      elixir: "~> 1.13",
+      elixir: "~> 1.15",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -38,7 +38,7 @@ defmodule ExAws.SNS.Mixfile do
 
   def application do
     [
-      extra_applications: [:logger],
+      extra_applications: [:logger, :public_key],
       mod: {ExAws.SNS.Application, []}
     ]
   end

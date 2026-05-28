@@ -474,11 +474,32 @@ defmodule ExAws.SNS do
           :ok | {:error, String.t()}
   def verify_message(message_params) do
     with :ok <- validate_message_params(message_params),
-         :ok <- validate_signature_version(message_params["SignatureVersion"]),
-         {:ok, public_key} <- ExAws.SNS.PublicKeyCache.get(message_params["SigningCertURL"]) do
+         {:ok, hash_algo} <- validate_signature_version(message_params["SignatureVersion"]),
+         {:ok, {public_key, not_before, not_after}} <-
+           ExAws.SNS.PublicKeyCache.get(message_params["SigningCertURL"]),
+         :ok <- validate_timestamp(message_params["Timestamp"], not_before, not_after) do
       message_params
-      |> get_string_to_sign
-      |> verify(message_params["Signature"], public_key)
+      |> get_string_to_sign()
+      |> verify(message_params["Signature"], public_key, hash_algo)
+    end
+  end
+
+  defp validate_timestamp(timestamp_str, not_before, not_after) do
+    case DateTime.from_iso8601(timestamp_str) do
+      {:ok, timestamp, _} ->
+        cond do
+          DateTime.before?(timestamp, not_before) ->
+            {:error, "Message Timestamp is before certificate validity period"}
+
+          DateTime.after?(timestamp, not_after) ->
+            {:error, "Message Timestamp is after certificate validity period"}
+
+          true ->
+            :ok
+        end
+
+      {:error, _} ->
+        {:error, "Invalid Timestamp format: #{timestamp_str}"}
     end
   end
 
@@ -519,20 +540,28 @@ defmodule ExAws.SNS do
   defp validate_signature_version(version) do
     case version do
       "1" ->
-        :ok
+        {:ok, :sha}
+
+      "2" ->
+        {:ok, :sha256}
 
       val when is_binary(val) ->
-        {:error, "Unsupported SignatureVersion, expected \"1\", got #{version}"}
+        {:error, "Unsupported SignatureVersion, expected \"1\" or \"2\", got #{version}"}
 
       _ ->
-        {:error, "Invalid SignatureVersion format, expected a String, got #{version}"}
+        {:error, "Invalid SignatureVersion format, expected a String, got #{inspect(version)}"}
     end
   end
 
   defp get_string_to_sign(message_params) do
-    message_params
-    |> Map.take(get_params_to_sign(message_params["Type"]))
-    |> Enum.map(fn {key, value} -> [to_string(key), "\n", to_string(value), "\n"] end)
+    get_params_to_sign(message_params["Type"])
+    |> Enum.sort()
+    |> Enum.flat_map(fn key ->
+      case Map.fetch(message_params, key) do
+        {:ok, value} -> [key, "\n", to_string(value), "\n"]
+        :error -> []
+      end
+    end)
     |> IO.iodata_to_binary()
   end
 
@@ -544,8 +573,8 @@ defmodule ExAws.SNS do
     end
   end
 
-  defp verify(message, signature, public_key) do
-    case :public_key.verify(message, :sha, Base.decode64!(signature), public_key) do
+  defp verify(message, signature, public_key, hash_algo) do
+    case :public_key.verify(message, hash_algo, Base.decode64!(signature), public_key) do
       true -> :ok
       false -> {:error, "Signature is invalid"}
     end
