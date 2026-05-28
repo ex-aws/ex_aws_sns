@@ -543,7 +543,9 @@ defmodule ExAws.SNSTest do
       assert :ok == SNS.verify_message(message)
 
       url = message["SigningCertURL"]
-      assert [{^url, {:RSAPublicKey, _, _}}] = :ets.lookup(ExAws.SNS.PublicKeyCache, url)
+
+      assert [{^url, {{:RSAPublicKey, _, _}, _not_before, _not_after}}] =
+               :ets.lookup(ExAws.SNS.PublicKeyCache, url)
     end
 
     test "fails with tampered message", %{verify_message: message} do
@@ -554,8 +556,8 @@ defmodule ExAws.SNSTest do
       assert {:error, _message} = SNS.verify_message(message |> Map.delete("Timestamp"))
     end
 
-    test "fails with an invalid signature version", %{verify_message: message} do
-      assert {:error, _message} = SNS.verify_message(message |> Map.put("SignatureVersion", "2"))
+    test "fails with an unsupported signature version", %{verify_message: message} do
+      assert {:error, _message} = SNS.verify_message(message |> Map.put("SignatureVersion", "3"))
     end
 
     test "fails with invalid certificate URL", %{verify_message: message} do
