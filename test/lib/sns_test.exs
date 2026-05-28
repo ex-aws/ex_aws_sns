@@ -543,7 +543,9 @@ defmodule ExAws.SNSTest do
       assert :ok == SNS.verify_message(message)
 
       url = message["SigningCertURL"]
-      assert [{^url, {:RSAPublicKey, _, _}}] = :ets.lookup(ExAws.SNS.PublicKeyCache, url)
+
+      assert [{^url, {{:RSAPublicKey, _, _}, _not_before, _not_after}}] =
+               :ets.lookup(ExAws.SNS.PublicKeyCache, url)
     end
 
     test "fails with tampered message", %{verify_message: message} do

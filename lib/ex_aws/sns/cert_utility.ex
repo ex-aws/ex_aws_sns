@@ -89,32 +89,41 @@ defmodule ExAws.SNS.CertUtility do
 
     :public_key.cacerts_load()
 
-    case Enum.find(:public_key.cacerts_get(), fn {:cert, _der, root_otp} ->
-           :public_key.pkix_is_issuer(current_otp, root_otp)
-         end) do
-      {:cert, root_der, _} ->
-        chain = intermediates ++ [current_der]
+    # Chain order for pkix_path_validation: closest to root first, peer (end-entity) last.
+    # As we recurse upward fetching intermediates, current_der moves closer to the root,
+    # so it prepends the accumulated chain.
+    chain = [current_der | intermediates]
 
-        case :public_key.pkix_path_validation(
-               root_der,
-               chain,
+    root_candidates =
+      Enum.filter(:public_key.cacerts_get(), fn {:cert, _der, root_otp} ->
+        :public_key.pkix_is_issuer(current_otp, root_otp)
+      end)
+
+    validated =
+      Enum.find_value(root_candidates, fn {:cert, root_der, _} ->
+        case :public_key.pkix_path_validation(root_der, chain,
                verify_fun: path_validation_verify_fun()
              ) do
-          {:ok, _} ->
-            :ok
-
-          {:error, {:bad_cert, reason}} ->
-            {:error, "Certificate chain validation failed: #{inspect(reason)}"}
+          {:ok, _} -> :ok
+          {:error, _} -> nil
         end
+      end)
 
-      nil ->
+    cond do
+      validated == :ok ->
+        :ok
+
+      root_candidates == [] ->
         tbs = otpcertificate(current_otp, :tbsCertificate)
         extensions = otptbscertificate(tbs, :extensions)
 
         with {:ok, aia_url} <- find_ca_issuers_url(extensions),
              {:ok, next_der} <- fetch_der(aia_url, http_client) do
-          build_and_validate_chain(next_der, intermediates ++ [current_der], http_client)
+          build_and_validate_chain(next_der, [current_der | intermediates], http_client)
         end
+
+      true ->
+        {:error, "Certificate chain validation failed: no trusted root found for issuer"}
     end
   end
 
