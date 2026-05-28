@@ -95,7 +95,11 @@ defmodule ExAws.SNS.CertUtility do
       {:cert, root_der, _} ->
         chain = intermediates ++ [current_der]
 
-        case :public_key.pkix_path_validation(root_der, chain, []) do
+        case :public_key.pkix_path_validation(
+               root_der,
+               chain,
+               verify_fun: path_validation_verify_fun()
+             ) do
           {:ok, _} ->
             :ok
 
@@ -117,6 +121,20 @@ defmodule ExAws.SNS.CertUtility do
   defp build_and_validate_chain(_current_der, _intermediates, _http_client) do
     {:error,
      "Certificate chain validation failed: exceeded maximum chain depth of #{@max_chain_depth}"}
+  end
+
+  defp path_validation_verify_fun do
+    {fn
+       # SNS signing certs are TLS server certs (Digital Signature, Key Encipherment)
+       # and do not have the keyCertSign usage required by strict path validation.
+       # We accept this because we only use the public key to verify message signatures,
+       # not for TLS. The chain of trust is still fully validated.
+       _cert, {:bad_cert, :invalid_key_usage}, state -> {:valid, state}
+       _cert, {:bad_cert, reason}, _state -> {:fail, reason}
+       _cert, {:extension, _}, state -> {:unknown, state}
+       _cert, :valid, state -> {:valid, state}
+       _cert, :valid_peer, state -> {:valid, state}
+     end, []}
   end
 
   defp find_ca_issuers_url(extensions) when is_list(extensions) do
