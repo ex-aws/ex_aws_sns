@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.3.5 - 2026-05-28
+- Fix for CVE-2026-47074 - lack of verification of SNS message signatures. This is a critical security vulnerability that could allow attackers to forge SNS messages and potentially compromise the integrity of your application. It is highly recommended to update to this version immediately to mitigate the risk of exploitation. Thank you to @PJUllrich and @maennchen for their assistance in identifying and addressing this issue.
+- Increase minimum Elixir version to 1.15 and OTP to 26
+
 ## v2.3.4 - 2024-09-10
 - Update use of `name` to `key` to support both AWS and Localstack
 
