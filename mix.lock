@@ -1,6 +1,6 @@
 %{
   "certifi": {:hex, :certifi, "2.16.0", "a4edfc1d2da3424d478a3271133bf28e0ec5e6fd8c009aab5a4ae980cb165ce9", [:rebar3], [], "hexpm", "8a64f6669d85e9cc0e5086fcf29a5b13de57a13efa23d3582874b9a19303f184"},
-  "configparser_ex": {:hex, :configparser_ex, "5.0.0", "2b37c5022500fc0a47245dad7c2a8df8d2b41441ed348c162de422965a787d0c", [:mix], [], "hexpm", "404319c6181d38e7cf2f6c4b8ce6d6cdaebbde5538a047ec29937cf7198b6b29"},
+  "configparser_ex": {:hex, :configparser_ex, "5.0.1", "a17cf2bf5b85756eea3d9a18d1fb8b37e81000a756336b5b76a693db4bd5e4a9", [:mix], [], "hexpm", "ba16c7a7a68b79ffbdf61e3079dc6a5fd2fb0c8764ab005439a4591973c519f9"},
   "dialyxir": {:hex, :dialyxir, "1.4.7", "dda948fcee52962e4b6c5b4b16b2d8fa7d50d8645bbae8b8685c3f9ecb7f5f4d", [:mix], [{:erlex, ">= 0.2.8", [hex: :erlex, repo: "hexpm", optional: false]}], "hexpm", "b34527202e6eb8cee198efec110996c25c5898f43a4094df157f8d28f27d9efe"},
   "earmark": {:hex, :earmark, "1.2.3", "206eb2e2ac1a794aa5256f3982de7a76bf4579ff91cb28d0e17ea2c9491e46a4", [:mix], [], "hexpm", "3b1dcad3067985dd8618c38399a8ee9c4e652d52a17a4aae7a6d6fc4fcc24856"},
   "earmark_parser": {:hex, :earmark_parser, "1.4.44", "f20830dd6b5c77afe2b063777ddbbff09f9759396500cdbe7523efd58d7a339c", [:mix], [], "hexpm", "4778ac752b4701a5599215f7030989c989ffdc4f6df457c5f36938cc2d2a2750"},
