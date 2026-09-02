@@ -533,8 +533,8 @@ defmodule ExAws.SNSTest do
   end
 
   # Requires AWS access
-  @tag :skip
   describe "verify_message/1" do
+    @describetag :skip
     setup [:add_verify_message]
 
     test "validate a pristine message from SNS and check that the key is cached", %{
